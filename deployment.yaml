@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-mcp-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-mcp-server
+  template:
+    metadata:
+      labels:
+        app: my-mcp-server
+    spec:
+      containers:
+      - name: my-mcp-server
+        image: your-image-registry/my-mcp-server:latest # Please update this with your image registry
+        ports:
+        - containerPort: 8000 # Assuming fastmcp runs on port 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-mcp-server-service
+spec:
+  selector:
+    app: my-mcp-server
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+  type: LoadBalancer
